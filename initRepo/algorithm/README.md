@@ -1,3 +1,0 @@
-# JuHa
-cpp algorithm
-?
