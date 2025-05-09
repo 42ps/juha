@@ -19,69 +19,37 @@
  */
 #include <stdio.h>
 #include <string.h>
-
-enum {
-    ap,
-    az,
-    bp,
-    bz,
-    cp,
-    cz,
-    dp,
-    dz,
-    f,
-    p
-} grade_enum;
+#include <unistd.h>
 
 double change_grade_to_double(char *grade) {
-    char *arr_grade[] = {"A+", "A0", "B+", "B0", "C+", "C0", "D+", "D0", "F", "P", NULL};
-    int i = 0;
-
-    while (strcmp(arr_grade[i], grade)) {
-        i++;
-    }
-
-    switch (i) {
-        case ap:
-            return 4.5;
-        case az:
-            return 4.0;
-        case bp:
-            return 3.5;
-        case bz:
-            return 3.0;
-        case cp:
-            return 2.5;
-        case cz:
-            return 2.0;
-        case dp:
-            return 1.5;
-        case dz:
-            return 1.0;
-        case f:
-            return 0;
-        default:
-            return -1;
-    }
+    //sleep(1);
+    // printf("E: %f\n", (double)'E');
+    // printf("grade[0]: %f\n", (double)grade[0]);
+    // printf("grade[1] == '+': %d\n", grade[1]=='+');
+    
+    return 'E' - grade[0] + (grade[1] == '+') * 0.5;
 }
 
 int main() {
     char subject[50];
     char grade[10];
+    
     double subject_score;
     double total = 0;
-    double grade_score;
     double total_grade_score = 0;
 
     while (0 < fscanf(stdin, "%s %lf %s\n", subject, &subject_score, grade)) {
-        grade_score = change_grade_to_double(grade);
-
-        if (grade_score == -1) {
-            continue;
+        switch (grade[0]){
+            case 'A' :
+            case 'B' : 
+            case 'C' :
+            case 'D' : 
+                total_grade_score += subject_score * change_grade_to_double(grade);
+                [[fallthrough]];
+            case 'F' : 
+                total += subject_score; 
+            case 'P' : continue;
         }
-
-        total_grade_score += subject_score * grade_score;
-        total += subject_score;
     }
 
     printf("%lf", total_grade_score / total);
